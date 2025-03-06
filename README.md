@@ -19,9 +19,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 ### Project Structure
-- .next/: Contains the build output and cache for Next.js.
-- .swc/: Contains SWC (Speedy Web Compiler) plugins.
-- coverage/: Contains code coverage reports.
 - public/: Contains static files such as images, which are served directly by the server.
 - src/: Contains the source code for the project.
   - app/: Contains the main application files.
