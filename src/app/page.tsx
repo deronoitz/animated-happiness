@@ -37,13 +37,26 @@ export default function Home() {
       ) => {
         if (!subscriptionData.data.ticketUpdated) return prev;
 
-        return {
-          getTickets: prev.getTickets.map((ticket) =>
-            ticket.id === subscriptionData.data.ticketUpdated.id
-              ? subscriptionData.data.ticketUpdated
-              : ticket
-          ),
-        };
+        const isNewData = !!prev.getTickets.find(
+          (ticket) => ticket.id === subscriptionData.data.ticketUpdated.id
+        );
+
+        if (!isNewData) {
+          return {
+            getTickets: [
+              subscriptionData.data.ticketUpdated,
+              ...prev.getTickets,
+            ],
+          };
+        } else {
+          return {
+            getTickets: prev.getTickets.map((ticket) =>
+              ticket.id === subscriptionData.data.ticketUpdated.id
+                ? subscriptionData.data.ticketUpdated
+                : ticket
+            ),
+          };
+        }
       },
     });
 

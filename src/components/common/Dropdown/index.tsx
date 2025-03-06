@@ -51,7 +51,7 @@ export default function Dropdown(props: DropdownProps) {
 
   useEffect(() => {
     setSelected(options.find((option) => option.value === value?.value) || null);
-  }, [value])
+  }, [value, options])
 
   return (
     <div className="relative w-full" ref={dropdownRef}>

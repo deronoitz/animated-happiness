@@ -11,13 +11,13 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 // Create the WebSocket client for GraphQL subscriptions
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:4000/graphql", // Replace with your WebSocket URL
+    url: process.env.NEXT_PUBLIC_GQL_WS_URL, 
   })
 );
 
 // Create the HTTP link for regular queries and mutations
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000/graphql", // Replace with your HTTP URL
+  uri: process.env.NEXT_PUBLIC_GQL_URL,
 });
 
 
