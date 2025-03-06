@@ -3,7 +3,8 @@ import {
   UPDATE_TICKET_STATUS,
   updateTypeInput,
 } from "@/apis/schemas/ticket";
-import { URGENCY_STATUS } from "@/constants/urgency";
+import { STATUS } from "@/constants/status";
+import { URGENCY, URGENCY_STATUS } from "@/constants/urgency";
 
 import { formatTimestamp } from "@/helpers/date";
 import { useMutation } from "@apollo/client";
@@ -23,10 +24,10 @@ function Item(props: ItemProps) {
 
   const urgencyColor =
     {
-      1: "text-bright-jade",
-      2: "text-royal-blue",
-      3: "text-pumpkin-orange",
-      4: "text-crimson-red",
+      [URGENCY.NON_URGENT]: "text-bright-jade",
+      [URGENCY.LESS_URGENT]: "text-royal-blue",
+      [URGENCY.URGENT]: "text-pumpkin-orange",
+      [URGENCY.EMERGENCY]: "text-crimson-red",
     }[ticket.urgency] || "";
 
   function handleMarkAsResolved(e: React.MouseEvent) {
@@ -35,7 +36,7 @@ function Item(props: ItemProps) {
     void updateStatus({
       variables: {
         id: ticket.id,
-        status: "resolved",
+        status: STATUS.RESOLVED,
       },
     });
   }
@@ -63,7 +64,7 @@ function Item(props: ItemProps) {
         >
           {URGENCY_STATUS[ticket.urgency]}
         </p>
-        {ticket.status !== "resolved" ? (
+        {ticket.status !== STATUS.RESOLVED ? (
           <button
             className="bg-teal-green text-white rounded-full px-2 py-0.5 text-xs cursor-pointer"
             data-testid="qa-resolve-button"

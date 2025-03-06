@@ -7,6 +7,14 @@ import {
 import type { dashboardType } from "@/apis/schemas/dashboard";
 import { useQuery } from "@apollo/client";
 
+type subscriptionDataType = {
+  subscriptionData: {
+    data: {
+      updatedDashboard: dashboardType;
+    };
+  };
+};
+
 function Dashboard() {
   const { data: dashboardData, subscribeToMore } = useQuery<{
     getDashboard: dashboardType;
@@ -14,19 +22,17 @@ function Dashboard() {
     fetchPolicy: "cache-and-network",
   });
 
+  // Subscribe to dashboard updates using Apollo Client subscription
   useEffect(() => {
     const unsubscribe = subscribeToMore({
       document: GET_DASHBOARD_SUBS,
-      updateQuery: (
-        prev,
-        {
-          subscriptionData,
-        }: { subscriptionData: { data: { updatedDashboard: dashboardType } } }
-      ) => {
-        if (!subscriptionData.data.updatedDashboard) return prev;
+      updateQuery: (prev, { subscriptionData }: subscriptionDataType) => {
+        const updatedDashboard = subscriptionData.data.updatedDashboard;
+        
+        if (!updatedDashboard) return prev;
 
         return {
-          getDashboard: subscriptionData.data.updatedDashboard,
+          getDashboard: updatedDashboard,
         };
       },
     });

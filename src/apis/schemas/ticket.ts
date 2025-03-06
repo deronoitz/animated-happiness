@@ -21,21 +21,6 @@ export type ticketInput = {
   description?: string | null;
 };
 
-export const GET_UPDATED_TICKET = gql`
-  subscription TicketUpdated {
-    ticketUpdated {
-      id
-      title
-      description
-      urgency
-      status
-      createdAt
-      updatedAt
-      completedAt
-    }
-  }
-`;
-
 export const GET_TICKET_BY_ID = gql`
   query GetTicketById($id: Int!) {
     getTicketById(id: $id) {

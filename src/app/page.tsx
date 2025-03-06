@@ -1,20 +1,26 @@
 "use client";
 
 import Item from "@/components/common/Item";
-
+import Dashboard from "@/components/shared/Dashboard";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
-
+import { useEffect } from "react";
 import { GET_TICKET_LIST, GET_TICKET_SUBS } from "@/apis/schemas/ticket";
-
 import type { ticketListType } from "@/apis/schemas/ticket";
 
-import { useEffect } from "react";
-import Dashboard from "@/components/shared/Dashboard";
+type ticketUpdatedType = {
+  subscriptionData: {
+    data: {
+      ticketUpdated: ticketListType;
+    };
+  };
+};
 
 export default function Home() {
   const router = useRouter();
 
+  // Fetch ticket list
   const { data, subscribeToMore } = useQuery<{ getTickets: ticketListType[] }>(
     GET_TICKET_LIST,
     {
@@ -26,37 +32,30 @@ export default function Home() {
     void router.push("/create", { scroll: true });
   }
 
+  // Subscribe to ticket updates using Apollo Client subscription
   useEffect(() => {
     const unsubscribe = subscribeToMore({
       document: GET_TICKET_SUBS,
-      updateQuery: (
-        prev,
-        {
-          subscriptionData,
-        }: { subscriptionData: { data: { ticketUpdated: ticketListType } } }
-      ) => {
-        if (!subscriptionData.data.ticketUpdated) return prev;
+      updateQuery: (prev, { subscriptionData }: ticketUpdatedType) => {
+        const ticketUpdated = subscriptionData.data.ticketUpdated;
+
+        if (!ticketUpdated) return prev;
 
         const isNewData = !!prev.getTickets.find(
-          (ticket) => ticket.id === subscriptionData.data.ticketUpdated.id
+          (ticket) => ticket.id === ticketUpdated.id
         );
 
         if (!isNewData) {
           return {
-            getTickets: [
-              subscriptionData.data.ticketUpdated,
-              ...prev.getTickets,
-            ],
-          };
-        } else {
-          return {
-            getTickets: prev.getTickets.map((ticket) =>
-              ticket.id === subscriptionData.data.ticketUpdated.id
-                ? subscriptionData.data.ticketUpdated
-                : ticket
-            ),
+            getTickets: [ticketUpdated, ...prev.getTickets],
           };
         }
+
+        return {
+          getTickets: prev.getTickets.map((ticket) =>
+            ticket.id === ticketUpdated.id ? ticketUpdated : ticket
+          ),
+        };
       },
     });
 
@@ -68,8 +67,8 @@ export default function Home() {
       <Dashboard />
 
       <div className="gap-5 flex flex-col py-5">
-        {data?.getTickets?.map((ticket, index: number) => (
-          <Item ticket={ticket} key={index} />
+        {data?.getTickets?.map((ticket) => (
+          <Item ticket={ticket} key={ticket.id} />
         ))}
       </div>
 
@@ -78,21 +77,12 @@ export default function Home() {
           className="bg-teal-green p-4 rounded-full cursor-pointer shadow-small-box"
           onClick={handleCreateTicket}
         >
-          <svg
-            width="21"
-            height="20"
-            viewBox="0 0 21 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1.5 10H10.5M19.5 10H10.5M10.5 10V1M10.5 10V19"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Image
+            src="/icons/plus-icon.svg"
+            alt="Add Ticket"
+            width={20}
+            height={20}
+          />
         </button>
       </div>
     </>

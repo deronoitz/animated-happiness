@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-// import { useRouter } from "next/router";
 import { memo } from "react";
+import clsx from "clsx";
 
 function Header() {
   const pathname = usePathname();
@@ -21,23 +22,9 @@ function Header() {
     <div className="flex items-center mt-[70px]">
       <button
         onClick={handleHistoryBack}
-        className={`cursor-pointer ${isRoot ? "invisible" : ""} `}
+        className={clsx("cursor-pointer", isRoot && "invisible")}
       >
-        <svg
-          width="15"
-          height="14"
-          viewBox="0 0 15 14"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M13.5 7H1M1 7L7 1M1 7L7 13"
-            stroke="black"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <Image src="/icons/arrow-left.svg" alt="Back" width={24} height={24} />
       </button>
 
       <h1 className="font-bold text-header-1 mx-auto text-center leading-6 tracking-[2%]">

@@ -1,10 +1,9 @@
 import { memo } from "react";
-
 import { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 
-interface BaseFieldProps {
+type BaseFieldProps = {
   as?: "input" | "textarea"; // Allows specifying input type
-}
+};
 
 interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   as?: "input";

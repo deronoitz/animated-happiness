@@ -1,3 +1,4 @@
+import { STATUS } from "@/constants/status";
 import * as Yup from "yup";
 
 export const validationSchema = Yup.object({
@@ -9,7 +10,7 @@ export const validationSchema = Yup.object({
 
 export const initialValues = {
   urgency: null,
-  status: "open",
+  status: STATUS.OPEN,
   title: "",
   description: "",
 };

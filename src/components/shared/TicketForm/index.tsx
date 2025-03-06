@@ -3,10 +3,11 @@ import Field from "@/components/common/Field";
 import { STATUS_OPTIONS, URGENCY_OPTIONS } from "@/constants/options";
 import { FormikProps } from "formik";
 import { ticketInput } from "@/apis/schemas/ticket";
+import clsx from "clsx";
 
-interface TicketFormProps {
+type TicketFormProps = {
   formik: FormikProps<ticketInput>;
-}
+};
 
 export default function TicketForm(props: TicketFormProps) {
   const { formik } = props;
@@ -73,7 +74,10 @@ export default function TicketForm(props: TicketFormProps) {
 
       <div className="px-4 mt-9 text-center">
         <button
-          className={`bg-teal-green w-full sm:max-w-[268px] text-white rounded-lg py-3 px-6 text-lg transition-all font-medium ${isButtonDisabled ? 'opacity-30' : ''}`}
+          className={clsx(
+            "bg-teal-green w-full sm:max-w-[268px] text-white rounded-lg py-3 px-6 text-lg transition-all font-medium",
+            isButtonDisabled && "opacity-30"
+          )}
           type="submit"
           onClick={(e) => {
             e.preventDefault();
@@ -84,5 +88,5 @@ export default function TicketForm(props: TicketFormProps) {
         </button>
       </div>
     </div>
-  )
+  );
 }
