@@ -49,6 +49,10 @@ export default function Dropdown(props: DropdownProps) {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    setSelected(options.find((option) => option.value === value?.value) || null);
+  }, [value])
+
   return (
     <div className="relative w-full" ref={dropdownRef}>
       {/* Dropdown Button */}
@@ -72,7 +76,10 @@ export default function Dropdown(props: DropdownProps) {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <ul className="absolute left-0 mt-1 w-full bg-white rounded-lg shadow-lg z-10" data-testid="qa-menu-wrapper-dropdown">
+        <ul
+          className="absolute left-0 mt-1 w-full bg-white rounded-lg shadow-lg z-10"
+          data-testid="qa-menu-wrapper-dropdown"
+        >
           {options.map((option, index) => (
             <li
               key={index}

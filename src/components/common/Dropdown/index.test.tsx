@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import Dropdown from "../Dropdown";
+import Dropdown from ".";
 
 describe("Dropdown Component", () => {
   const mockOptions = [

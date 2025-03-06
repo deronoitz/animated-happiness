@@ -12,18 +12,18 @@ export const STATUS_OPTIONS = [
 export const URGENCY_OPTIONS = [
   {
     label: "Non Urgent",
-    value: "1",
+    value: 1,
   },
   {
     label: "Less Urgent",
-    value: "2",
+    value: 2,
   },
   {
     label: "Urgent",
-    value: "3",
+    value: 3,
   },
   {
     label: "Emergency",
-    value: "4",
+    value: 4,
   },
 ];

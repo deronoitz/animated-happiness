@@ -12,6 +12,8 @@ const config: Config = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   collectCoverageFrom: [
     "<rootDir>/src/components/**/*.{js,jsx,ts,tsx}",
+    "!<rootDir>/src/components/**/validation.{js,jsx,ts,tsx}",
+    "!<rootDir>/src/components/**/types.{js,jsx,ts,tsx}",
     "!<rootDir>/src/components/**/*.test.{js,jsx,ts,tsx}",
   ],
   coverageDirectory: "<rootDir>/coverage",

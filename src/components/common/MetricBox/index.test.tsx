@@ -14,6 +14,13 @@ describe("MetricBox Component", () => {
     expect(screen.getByText(metricProps.title)).toBeInTheDocument();
   });
 
+  test("renders without count", () => {
+    render(<MetricBox title="Test Metric" count={undefined} />);
+
+    expect(screen.getByText(0)).toBeInTheDocument();
+    expect(screen.getByText("Test Metric")).toBeInTheDocument();
+  });
+
   test("applies correct classes to count and title", () => {
     render(<MetricBox {...metricProps} />);
     

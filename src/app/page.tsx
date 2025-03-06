@@ -1,35 +1,64 @@
 "use client";
 
-import Item from "@/components/Item";
-import MetricBox from "@/components/MetricBox";
+import Item from "@/components/common/Item";
 
-import TICKET_DATA from "@/mocks/ticket";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@apollo/client";
+
+import { GET_TICKET_LIST, GET_TICKET_SUBS } from "@/apis/schemas/ticket";
+
+import type { ticketListType } from "@/apis/schemas/ticket";
+
+import { useEffect } from "react";
+import Dashboard from "@/components/shared/Dashboard";
 
 export default function Home() {
   const router = useRouter();
+
+  const { data, subscribeToMore } = useQuery<{ getTickets: ticketListType[] }>(
+    GET_TICKET_LIST,
+    {
+      fetchPolicy: "cache-and-network",
+    }
+  );
 
   function handleCreateTicket() {
     void router.push("/create", { scroll: true });
   }
 
+  useEffect(() => {
+    const unsubscribe = subscribeToMore({
+      document: GET_TICKET_SUBS,
+      updateQuery: (
+        prev,
+        {
+          subscriptionData,
+        }: { subscriptionData: { data: { ticketUpdated: ticketListType } } }
+      ) => {
+        if (!subscriptionData.data.ticketUpdated) return prev;
+
+        return {
+          getTickets: prev.getTickets.map((ticket) =>
+            ticket.id === subscriptionData.data.ticketUpdated.id
+              ? subscriptionData.data.ticketUpdated
+              : ticket
+          ),
+        };
+      },
+    });
+
+    return () => unsubscribe();
+  }, [subscribeToMore]);
+
   return (
     <>
-      {/* Meta */}
-      <div className="flex gap-5 justify-center mt-6 mb-6">
-        <MetricBox count={2} title="Open Requests" />
-        <MetricBox count={3} title="Urgent Requests" />
-        <MetricBox count={3} title="Average time (days) to resolve" />
-      </div>
-      {/* End of Meta */}
+      <Dashboard />
 
-      {/* List of Tickets */}
       <div className="gap-5 flex flex-col py-5">
-        {TICKET_DATA.map((ticket, index) => (
+        {data?.getTickets?.map((ticket, index: number) => (
           <Item ticket={ticket} key={index} />
         ))}
       </div>
-      {/* End of List of Tickets */}
 
       <div className="text-right mt-3 mb-12">
         <button
